@@ -1,8 +1,8 @@
 package com.revature;
 
 public interface employeeControls {
-    public void vAccInfo();
-    public void vAccBalance();
-    public void vpPInfo();
-    public void vCApplication();
+    public void gAccInfo();
+    public void gAccBalance();
+    public void gPInfo();
+    public void gCApplication();
 } 

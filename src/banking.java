@@ -3,6 +3,8 @@ package com.revature;
 import java.util.*;
 import java.io.*;
 
+// run with - java -cp ./bin/ com.revature.banking
+
 class banking {
     public static void main(String[] args) {
         System.out.println("Welcome to the bank\n");

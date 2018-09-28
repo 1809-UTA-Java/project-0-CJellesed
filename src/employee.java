@@ -14,17 +14,24 @@ class employee extends account implements employeeControls {
     protected void transferFunds() {
         
     }
-
-    protected void gAccInfo() {
-
-    }
-    protected void gAccBalance() {
+    
+    @Override
+    public void gAccInfo() {
 
     }
-    protected void gPInfo() {
+        
+    @Override
+    public void gAccBalance() {
 
     }
-    protected void gCApplication() {
+        
+    @Override
+    public void gPInfo() {
+        System.out.println("test");
+    }
+        
+    @Override
+    public void gCApplication() {
 
     }
 }

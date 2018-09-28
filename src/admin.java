@@ -14,16 +14,24 @@ class admin extends account implements employeeControls {
     protected void transferFunds() {
 
     }
-    protected void gAccInfo() {
+
+    @Override
+    public void gAccInfo() {
 
     }
-    protected void gAccBalance() {
+        
+    @Override
+    public void gAccBalance() {
 
     }
-    protected void gPInfo() {
+        
+    @Override
+    public void gPInfo() {
 
     }
-    protected void gCApplication() {
+        
+    @Override
+    public void gCApplication() {
 
     }
 
@@ -34,7 +42,7 @@ class admin extends account implements employeeControls {
 
     }
     protected void sPInfo() {
-
+        System.out.println("test");
     }
     protected void sCApplication() {
 
