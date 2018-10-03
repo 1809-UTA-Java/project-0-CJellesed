@@ -1,6 +1,9 @@
 package com.revature;
+//import sql.java;
 
-abstract class account {
+import java.sql.SQLException;
+
+class account {
         // I think a default constructor should be left out, because we want no empty accounts. Check later.
         protected account(String aName, String fName, String lName, int pLevel, double cFunds) {
             this.aName = aName;
@@ -9,9 +12,20 @@ abstract class account {
             this.pLevel = pLevel;
             this. cFunds = cFunds;
         }
-        abstract protected void depositeFunds();
-        abstract protected void withdrawFunds();
-        abstract protected void transferFunds();
+        protected void depositeFunds() {
+
+        }
+        protected void withdrawFunds() {};
+        protected void transferFunds() {};
+        static protected String viewFunds() {
+            String funds = "";
+            sql.connect();
+            try { sql.getFunds(); }
+            catch(SQLException e) {
+                e.printStackTrace();
+            }
+            return funds;
+        }
 
         protected String aName, fName, lName;
         protected int pLevel;
