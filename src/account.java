@@ -13,7 +13,7 @@ abstract class account {
         abstract protected void withdrawFunds();
         abstract protected void transferFunds();
 
-        private String aName, fName, lName;
-        private int pLevel;
-        private double cFunds;
+        protected String aName, fName, lName;
+        protected int pLevel;
+        protected double cFunds;
 }
