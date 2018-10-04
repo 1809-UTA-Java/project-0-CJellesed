@@ -18,6 +18,14 @@ class sql {
             e.printStackTrace();
         }
     }
+
+    static boolean isConnected() {
+        if(connection != null)
+            return true;
+        else
+            return false;
+    }
+
     static void connect() {
         //System.out.println("-------- Oracle JDBC Connection Testing ------");
 
@@ -59,7 +67,8 @@ class sql {
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            if(rs == null)
+            //With the account implementation this if should never be hit.
+            if(!rs.isBeforeFirst())
                 System.out.println("\nInvalid Account Info");
             while (rs.next()) {
                 System.out.println("\nAccount: " + rs.getString("ACCNUM"));
@@ -73,5 +82,29 @@ class sql {
         } finally {
             if (stmt != null) { stmt.close(); }
         }
+    }
+
+    static String login(String uName, String uPassword) throws SQLException {
+        Statement stmt = null;
+        String name = "";
+        String query = "select fName from users where uname = '" + uName + "' and password = '" + uPassword + "'";
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst())
+                System.out.println("\nInvalid Account Info");
+            while (rs.next()) {
+                //System.out.println("\nAccount: " + rs.getString("ACCNUM"));
+                // remove this var if you decide not to pass anything back.
+                name = rs.getString("fName");
+                System.out.println("Welcome: " + name);
+                //banking.Continue();
+            }
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+        return name;
     }
 } 

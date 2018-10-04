@@ -9,21 +9,41 @@ import java.io.*;
 // java -cp bin:ojdbc8.jar com.revature.banking
 
 class banking {
+    static String choice = "";
+    static boolean mainCont = true;
     public static void main(String[] args) {
         System.out.println("Welcome to the bank\n");
-        runUser();
+        account ac = new account();
+        while(mainCont && ac.aName == "")
+            login(ac);
+        if(ac.pLevel == 0)
+            runUser(ac);
         
     }
 
-    static void runUser() {
+    static void login(account ac) {
+        //boolean mainCont = true;
+            System.out.println("1 - Login\t2 - Create Account\t3 - Exit");
+            choice = getString();
+            switch(choice) {
+                case "1":   ac.login();
+                            break;
+                case "2":   System.out.println("Create Account");
+                            break;
+                case "3":   System.out.println("Have a nice day!");
+                            mainCont = false;
+                default:    System.out.println("Invalid Input");
+            }
+    }
+    static void runUser(account ac) {
         boolean cont = true;
-        String choice = "";
+        //String choice = "";
         while(cont) {
             System.out.println("\n1 - View Balance\t2 - Withdraw Funds\t3 - Transfer Funds");
             System.out.println("4 - Logout\t5 - Apply for Joint Account");
             choice = getString();
             switch(choice) {
-                case "1":   account.viewFunds();
+                case "1":   ac.viewFunds();
                             break;
                 case "2":   System.out.println("Withdraw Funds");
                             break;
@@ -52,7 +72,7 @@ class banking {
     }
 
     static void Continue() {
-        System.out.println("Press any key to continue.");
+        System.out.println("\nPress any key to continue.");
         try {
             System.in.read();
         } catch (Exception e) {
