@@ -2,8 +2,8 @@ package com.revature;
 
 class employee extends account implements employeeControls {
 
-    protected employee(String aName, String fName, String lName, int pLevel, double cFunds) {
-        super(aName, fName, lName, pLevel, cFunds);
+    protected employee(String aName, String fName, int pLevel, double cFunds) {
+        super(aName, fName, pLevel, cFunds);
     }
     protected void depositeFunds() {
 

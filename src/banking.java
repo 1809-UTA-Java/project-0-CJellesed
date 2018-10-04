@@ -11,15 +11,34 @@ import java.io.*;
 class banking {
     public static void main(String[] args) {
         System.out.println("Welcome to the bank\n");
-        System.out.println("1 - log in.\t2 - Create account\n");
-        String temp = getString();
-        account.viewFunds();
-        if(temp == "1") {
-            //account.viewFunds();
-        }
+        runUser();
         
     }
 
+    static void runUser() {
+        boolean cont = true;
+        String choice = "";
+        while(cont) {
+            System.out.println("\n1 - View Balance\t2 - Withdraw Funds\t3 - Transfer Funds");
+            System.out.println("4 - Logout\t5 - Apply for Joint Account");
+            choice = getString();
+            switch(choice) {
+                case "1":   account.viewFunds();
+                            break;
+                case "2":   System.out.println("Withdraw Funds");
+                            break;
+                case "3":   System.out.println("Trandsfer Funds");
+                            break;
+                case "4":   System.out.println("Logging Out");
+                            //Expand when accoutns are implemented.        
+                    cont = false;
+                            break;
+                case "5":   System.out.println("Apply for Joint Account");
+                            break;
+                default: System.out.println("Invalid Input");
+            }
+        }
+    }
     // Currently returns one line Strings from the user.
     static String getString() {
          
@@ -30,5 +49,14 @@ class banking {
 			System.out.println("Some Error\n");
 		}
         return userIn;
+    }
+
+    static void Continue() {
+        System.out.println("Press any key to continue.");
+        try {
+            System.in.read();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

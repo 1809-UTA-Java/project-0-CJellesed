@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.*;
+import java.io.*;
 
 class sql {
     
@@ -17,7 +19,7 @@ class sql {
         }
     }
     static void connect() {
-        System.out.println("-------- Oracle JDBC Connection Testing ------");
+        //System.out.println("-------- Oracle JDBC Connection Testing ------");
 
         try {
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
@@ -27,7 +29,7 @@ class sql {
             return;
         }
 
-        System.out.println("Oracle JDBC Driver Registered!");
+        //System.out.println("Oracle JDBC Driver Registered!");
 
         try {
 
@@ -43,28 +45,28 @@ class sql {
         }
 
         if (connection != null) {
-            System.out.println("Connected!");
+            System.out.println("\nConnection Successful");
         } else {
-            System.out.println("Failed to connect");
+            System.out.println("\nFailed to connect");
         }
     }
     
-    static void getFunds() throws SQLException {
+    static void getFunds(String uName, String uPassword) throws SQLException {
         Statement stmt = null;
-        String name = "CJellesed", funds = "";
-        String query = "select * from users where userName = 'CJellesed'";
+        String funds;
+        String query = "select accnum, (select abalance from accounts where accounts.anum = users.accnum) as temp from users where users.uname = '" + uName + "' and users.password = '" + uPassword + "'";
+        //String query2 = "select accnum, (select abalance from accounts where accounts.anum = users.accnum) as temp from users where users.uname = 'CJellesed' and users.password = 'pswrd'";
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
+            if(rs == null)
+                System.out.println("\nInvalid Account Info");
             while (rs.next()) {
-                System.out.println("In while");
-                System.out.println(rs.getString("lName"));
-                //int supplierID = rs.getInt("SUP_ID");
-                //float price = rs.getFloat("PRICE");
-                //int sales = rs.getInt("SALES");
-                //int total = rs.getInt("TOTAL");
-                funds = rs.getString("fName");
-                System.out.println(funds);
+                System.out.println("\nAccount: " + rs.getString("ACCNUM"));
+                // remove this var if you decide not to pass anything back.
+                funds = rs.getString("TEMP");
+                System.out.println("Current Balance: " + funds);
+                banking.Continue();
             }
         } catch (SQLException e ) {
             e.printStackTrace();
