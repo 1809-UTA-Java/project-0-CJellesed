@@ -2,8 +2,8 @@ package com.revature;
 
 class admin extends account implements employeeControls {
 
-    protected admin(String aName, String password, String fName, int pLevel, double cFunds) {
-        super(aName, password, fName, pLevel, cFunds);
+    protected admin(String aName, String password, String fName, int pLevel, int aNum) {
+        super(aName, password, fName, pLevel, aNum);
     }
     protected void depositeFunds() {
 

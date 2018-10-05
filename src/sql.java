@@ -53,15 +53,15 @@ class sql {
         }
 
         if (connection != null) {
-            System.out.println("\nConnection Successful");
+            System.out.println("Connection Successful");
         } else {
             System.out.println("\nFailed to connect");
         }
     }
     
-    static void getFunds(String uName, String uPassword) throws SQLException {
+    static String getFunds(String uName, String uPassword) throws SQLException {
         Statement stmt = null;
-        String funds;
+        String funds = "";
         String query = "select accnum, (select abalance from accounts where accounts.anum = users.accnum) as temp from users where users.uname = '" + uName + "' and users.password = '" + uPassword + "'";
         try {
             stmt = connection.createStatement();
@@ -74,8 +74,28 @@ class sql {
                 // remove this var if you decide not to pass anything back.
                 funds = rs.getString("TEMP");
                 System.out.println("Current Balance: " + funds);
-                banking.Continue();
+                //banking.Continue();
             }
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+        return funds;
+    }
+
+    static void deposit(String money, int account) throws SQLException {
+        Statement stmt = null;
+        String query = "update accounts set abalance = abalance + " + money + " where anum =  " + account;
+        try {
+            stmt = connection.createStatement();
+            stmt.execute(query);
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst()) {
+                System.out.println("Deposit failed?");
+            }
+            else
+                System.out.println("\nDeposit Successful");
         } catch (SQLException e ) {
             e.printStackTrace();
         } finally {
@@ -112,14 +132,6 @@ class sql {
         try {
             stmt = connection.createStatement();
             stmt.execute(query);
-            // ResultSet rs = stmt.executeUpdate(query);
-            // if(!rs.isBeforeFirst())
-            //     System.out.println("\nSomething went wrong.");
-            // while (rs.next()) {;
-                // remove this var if you decide not to pass anything back.
-                //name = rs.getString("fName");
-                //System.out.println("Welcome: " + name);
-            //}
         } catch (SQLException e ) {
             e.printStackTrace();
         } finally {

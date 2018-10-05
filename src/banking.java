@@ -41,21 +41,23 @@ class banking {
         boolean cont = true;
         //String choice = "";
         while(cont) {
-            System.out.println("\n1 - View Balance\t2 - Withdraw Funds\t3 - Transfer Funds");
-            System.out.println("4 - Logout\t5 - Apply for Joint Account");
+            System.out.println("\n1 - View Balance\t2 - Deposit Funds\t3 - Withdraw Funds");
+            System.out.println("4 - Transfer Funds\t5 - Logout\t6 - Apply for Joint Account");
             choice = getString();
             switch(choice) {
                 case "1":   ac.viewFunds();
                             break;
-                case "2":   System.out.println("Withdraw Funds");
+                case "2":   ac.depositeFunds();;
                             break;
-                case "3":   System.out.println("Trandsfer Funds");
+                case "3":   System.out.println("Deposite Funds");
                             break;
-                case "4":   System.out.println("Logging Out");
+                case "4":   System.out.println("Trandsfer Funds");
+                            break;
+                case "5":   System.out.println("Logging Out");
                             //Expand when accoutns are implemented.        
                     cont = false;
                             break;
-                case "5":   System.out.println("Apply for Joint Account");
+                case "6":   System.out.println("Apply for Joint Account");
                             break;
                 default: System.out.println("Invalid Input");
             }
