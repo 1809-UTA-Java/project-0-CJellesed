@@ -63,7 +63,6 @@ class sql {
         Statement stmt = null;
         String funds;
         String query = "select accnum, (select abalance from accounts where accounts.anum = users.accnum) as temp from users where users.uname = '" + uName + "' and users.password = '" + uPassword + "'";
-        //String query2 = "select accnum, (select abalance from accounts where accounts.anum = users.accnum) as temp from users where users.uname = 'CJellesed' and users.password = 'pswrd'";
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -93,12 +92,10 @@ class sql {
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst())
                 System.out.println("\nInvalid Account Info");
-            while (rs.next()) {
-                //System.out.println("\nAccount: " + rs.getString("ACCNUM"));
+            while (rs.next()) {;
                 // remove this var if you decide not to pass anything back.
                 name = rs.getString("fName");
                 System.out.println("Welcome: " + name);
-                //banking.Continue();
             }
         } catch (SQLException e ) {
             e.printStackTrace();
@@ -106,5 +103,50 @@ class sql {
             if (stmt != null) { stmt.close(); }
         }
         return name;
+    }
+
+    static String createAccount(String uName, String uPassword, String fName, String lName, String email) throws SQLException {
+        Statement stmt = null;
+        String name = "";
+        String query = "insert into users (uname, fname, lname, email, password) values ('" + uName  + "','" + fName + "','" + lName + "','" + email + "','" + uPassword + "')";
+        try {
+            stmt = connection.createStatement();
+            stmt.execute(query);
+            // ResultSet rs = stmt.executeUpdate(query);
+            // if(!rs.isBeforeFirst())
+            //     System.out.println("\nSomething went wrong.");
+            // while (rs.next()) {;
+                // remove this var if you decide not to pass anything back.
+                //name = rs.getString("fName");
+                //System.out.println("Welcome: " + name);
+            //}
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+        return name;
+    }
+
+    static boolean checkColumn(String column, String value) throws SQLException {
+        boolean free = false;
+        Statement stmt = null;
+        String query = "Select " + column + " from users where " + column + " = '" + value + "'";
+        try {
+            stmt = connection.createStatement();
+            stmt.execute(query);
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst()) {
+                System.out.println("Entered option is free");
+                free = true;
+            }
+            else
+                System.out.println("\nUsername is taken");
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+        return free;
     }
 } 

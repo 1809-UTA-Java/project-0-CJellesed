@@ -31,6 +31,8 @@ class account {
             aName = getString();
             System.out.println("\nEnter Password");
             password = getString();
+
+            System.out.println("Connecting:");
             
             if(!sql.isConnected())
                 sql.connect();
@@ -51,25 +53,53 @@ class account {
         protected void withdrawFunds() {};
         protected void transferFunds() {};
         protected void viewFunds() {
-            //String funds = "", name = "", pswrd = "";
-            //name = getAName();
-            //pswrd = getPassword();
-            // System.out.println("\nEnter Username");
-            // name = getString();
-            // System.out.println("\nEnter Password");
-            // pswrd = getString();
             sql.connect();
             try { sql.getFunds(aName, password); }
             catch(SQLException e) {
                 e.printStackTrace();
             }
-            //return funds;
         }
-        String getAName() {
-            return aName;
-        }
-        String getPassword() {
-            return password;
+
+        void createAccount() {
+            //Work on the getter and setters here.
+            String uname = "", password = "", fname = "", lname = "", email = "";
+            boolean free = false;
+            while (!free) {
+                System.out.println("Enter Username.");
+                uname = getString();
+                System.out.println("\nChecking availability");
+                if(!sql.isConnected())
+                    sql.connect();
+                try { free = sql.checkColumn("uname", uname); }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            free = false;
+            while(!free) {
+                System.out.println("\nEnter email");
+                email = getString();
+                System.out.println("\nChecking availability");
+                if(!sql.isConnected())
+                    sql.connect();
+                try { free = sql.checkColumn("email", email); }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.println("Enter a password");
+            password = getString();
+            System.out.println("Enter First Name");
+            fname = getString();
+            System.out.println("Enter Last Name");
+            lname = getString();
+
+            try { sql.createAccount(uname, password, fname, lname, email); }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         // Currently returns one line Strings from the user.
         static String getString() {

@@ -10,28 +10,30 @@ import java.io.*;
 
 class banking {
     static String choice = "";
-    static boolean mainCont = true;
+    static boolean mainCont = true , exit = false;
     public static void main(String[] args) {
         System.out.println("Welcome to the bank\n");
         account ac = new account();
         while(mainCont && ac.aName == "")
             login(ac);
-        if(ac.pLevel == 0)
+        if(ac.pLevel == 0 && !exit)
             runUser(ac);
         
     }
 
     static void login(account ac) {
         //boolean mainCont = true;
-            System.out.println("1 - Login\t2 - Create Account\t3 - Exit");
+            System.out.println("\n1 - Login\t2 - Create Account\t3 - Exit");
             choice = getString();
             switch(choice) {
                 case "1":   ac.login();
                             break;
-                case "2":   System.out.println("Create Account");
+                case "2":   ac.createAccount();
                             break;
-                case "3":   System.out.println("Have a nice day!");
+                case "3":   System.out.println("Have a nice day!\n");
                             mainCont = false;
+                            exit = true;
+                            break;
                 default:    System.out.println("Invalid Input");
             }
     }
