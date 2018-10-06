@@ -50,12 +50,16 @@ class account {
             //Make sure to write this method
             // Also make sure to change 3 from a hardcoded value ie rework login()
             String ammount = getAmmount(1);
-            // if(!sql.isConnected())
-            //     sql.connect();
-            // try { sql.deposit(ammount, 3); }
-            // catch(SQLException e) {
-            //     e.printStackTrace();
-            // }
+            if(!sql.isConnected())
+                sql.connect();
+            try { 
+                sql.deposit(ammount, 3);
+                System.out.println("New Balance is");
+                sql.getFunds(aName, password);
+            }
+            catch(SQLException e) {
+                e.printStackTrace();
+            }
         }
         protected void withdrawFunds() {};
         protected void transferFunds() {};
@@ -131,13 +135,15 @@ class account {
         String getAmmount(int check) {
             boolean valid = false, cont = true;
             double number = 0, balance = 0;
-            String ammount = "";
+            String ammount = "", cbalance = "";
 
             while(!valid && cont) {
                 valid = true;
 
                 System.out.println("\nEnter ammount");
                 ammount = getString();
+
+                System.out.println(ammount);
 
                 try { number = Double.parseDouble(ammount); }
                 catch(Exception e) {
@@ -155,11 +161,11 @@ class account {
                 }
                 //Checks to keep from overdrawing.
                 if(check == 1 && valid) {
-                    try { ammount = sql.getFunds(aName, password); }
+                    try { cbalance = sql.getFunds(aName, password); }
                     catch(SQLException e) {
                         e.printStackTrace();
                     }
-                    try { balance = Double.parseDouble(ammount); }
+                    try { balance = Double.parseDouble(cbalance); }
                     catch(Exception e) {
                         e.printStackTrace(); 
                     }

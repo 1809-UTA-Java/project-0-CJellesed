@@ -30,7 +30,7 @@ class banking {
                             break;
                 case "2":   ac.createAccount();
                             break;
-                case "3":   System.out.println("Have a nice day!\n");
+                case "3":   System.out.println("Have a nice day!");
                             mainCont = false;
                             exit = true;
                             break;

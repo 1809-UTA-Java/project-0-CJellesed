@@ -89,7 +89,7 @@ class sql {
         String query = "update accounts set abalance = abalance + " + money + " where anum =  " + account;
         try {
             stmt = connection.createStatement();
-            stmt.execute(query);
+            //stmt.execute(query);
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst()) {
                 System.out.println("Deposit failed?");
@@ -146,7 +146,7 @@ class sql {
         String query = "Select " + column + " from users where " + column + " = '" + value + "'";
         try {
             stmt = connection.createStatement();
-            stmt.execute(query);
+            //stmt.execute(query);
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst()) {
                 System.out.println("Entered option is free");
