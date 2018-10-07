@@ -185,7 +185,13 @@ class account {
         }
 
         protected void joinAccount() {
-            
+            String userName = "";
+            System.out.println("Enter User Name of the person you want to join with");
+            userName = getString();
+            try { sql.joinAccount(userName, aName); }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         // Currently returns one line Strings from the user.

@@ -60,7 +60,7 @@ class banking {
                             loggedIn = false;
                             cont = false;
                             break;
-                case "6":   System.out.println("Apply for Joint Account");
+                case "6":   ac.joinAccount();
                             break;
                 default: System.out.println("Invalid Input");
             }

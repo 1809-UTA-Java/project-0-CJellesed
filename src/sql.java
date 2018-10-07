@@ -206,4 +206,20 @@ class sql {
         }
         return active;
     }
+
+    static void joinAccount(String userName, String aName) throws SQLException {
+        Statement stmt = null;
+        String query = "update users set merge = (select accnum from users where uname = '" + userName + "') where uname = '" + aName + "'";
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst()) {
+                System.out.println("User not found");
+            }
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+    }
 } 
