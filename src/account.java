@@ -27,6 +27,7 @@ class account {
 
         protected boolean login() {
             boolean loggedIn = true;
+            account ac = new account();
             System.out.println("\nEnter Username");
             aName = getString();
             System.out.println("\nEnter Password");
@@ -36,17 +37,24 @@ class account {
             
             if(!sql.isConnected())
                 sql.connect();
-            try { fName = sql.login(aName, password); }
+            try { ac = sql.login(aName, password); }
             catch(SQLException e) {
                 e.printStackTrace();
             }
             //If the login was bad, Reset the name and password to empty. aName is currently checked for valid logins.
             // aName == "" is === to Logged out atm.
-            if(fName == "") {
-                aName = "";
-                password = "";
+            // if(fName == "") {
+            //     aName = "";
+            //     password = "";
+            //     loggedIn = false;
+            // }
+            aName = ac.aName;
+            password = ac.password;
+            fName = ac.fName;
+            pLevel = ac.pLevel;
+            aNum = ac.aNum;
+            if(aName == "")
                 loggedIn = false;
-            }
             return loggedIn;
         }
         protected void depositeFunds() {
@@ -62,7 +70,7 @@ class account {
                 if(!sql.isConnected())
                     sql.connect();
                 try { 
-                    sql.deposit(ammount, 3);
+                    sql.deposit(ammount, aNum);
                     System.out.println("New Balance is");
                     sql.getFunds(aName, password);
                 }
@@ -83,7 +91,7 @@ class account {
                 if(!sql.isConnected())
                     sql.connect();
                 try {
-                    sql.withdraw(ammount, 3);
+                    sql.withdraw(ammount, aNum);
                     System.out.println("New Balance is");
                     sql.getFunds(aName, password);
                 }
@@ -95,13 +103,23 @@ class account {
         protected void transferFunds() {
             // Also make sure to change 3 from a hardcoded value ie rework login()
             String ammount = getAmmount(1);
-            System.out.println("Enter account number to tranfer to.");
-            //String where = getString();
+            boolean correct = false;
+            int account = 0;
+            while(!correct) {
+                try { 
+                    System.out.println("Enter account number to tranfer to.");
+                    account = Integer.parseInt(getString());
+                    correct = true;
+                }
+                catch(Exception e) { 
+                    System.out.println("Must enter an integer"); 
+                }
+            }
             if(!sql.isConnected())
                 sql.connect();
             try { 
-                sql.withdraw(ammount, 3);
-                sql.deposit(ammount, 2);
+                sql.withdraw(ammount, aNum);
+                sql.deposit(ammount, account);
                 System.out.println("New Balance is");
                 sql.getFunds(aName, password);
             }

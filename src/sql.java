@@ -123,10 +123,11 @@ class sql {
         }
     }
 
-    static String login(String uName, String uPassword) throws SQLException {
+    static account login(String uName, String uPassword) throws SQLException {
+        account ac = new account();
         Statement stmt = null;
         String name = "";
-        String query = "select fName from users where uname = '" + uName + "' and password = '" + uPassword + "'";
+        String query = "select * from users where uname = '" + uName + "' and password = '" + uPassword + "'";
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -134,7 +135,11 @@ class sql {
                 System.out.println("\nInvalid Account Info");
             while (rs.next()) {;
                 // remove this var if you decide not to pass anything back.
-                name = rs.getString("fName");
+                ac.aName = uName;
+                ac.password = uPassword;
+                ac.fName = rs.getString("fName");
+                ac.pLevel = rs.getInt("ulevel");
+                ac.aNum = rs.getInt("accnum");
                 System.out.println("Welcome: " + name);
             }
         } catch (SQLException e ) {
@@ -142,7 +147,7 @@ class sql {
         } finally {
             if (stmt != null) { stmt.close(); }
         }
-        return name;
+        return ac;
     }
 
     static String createAccount(String uName, String uPassword, String fName, String lName, String email) throws SQLException {
