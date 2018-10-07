@@ -103,6 +103,26 @@ class sql {
         }
     }
 
+    //This could be merged with deposit, but oh well. 
+    static void withdraw(String money, int account) throws SQLException {
+        Statement stmt = null;
+        String query = "update accounts set abalance = abalance - " + money + " where anum =  " + account;
+        try {
+            stmt = connection.createStatement();
+            //stmt.execute(query);
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst()) {
+                System.out.println("Withdraw failed?");
+            }
+            else
+                System.out.println("\nWithdraw Successful");
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+    }
+
     static String login(String uName, String uPassword) throws SQLException {
         Statement stmt = null;
         String name = "";
@@ -160,5 +180,25 @@ class sql {
             if (stmt != null) { stmt.close(); }
         }
         return free;
+    }
+
+    static boolean isActive(String user) throws SQLException {
+        boolean active = true;
+        Statement stmt = null;
+        String query = "Select active from users where uname = '" + user + "' and active = 1";
+        try {
+            stmt = connection.createStatement();
+            //stmt.execute(query);
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst()) {
+                System.out.println("Account is not active");
+                active = false;
+            }
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+        return active;
     }
 } 

@@ -10,14 +10,16 @@ import java.io.*;
 
 class banking {
     static String choice = "";
-    static boolean mainCont = true , exit = false;
+    static boolean mainCont = true , loggedIn = false;
     public static void main(String[] args) {
         System.out.println("Welcome to the bank\n");
         account ac = new account();
-        while(mainCont && ac.aName == "")
+        while(mainCont) {
             login(ac);
-        if(ac.pLevel == 0 && !exit)
-            runUser(ac);
+            if(loggedIn)
+                runUser(ac);
+        }
+        
         
     }
 
@@ -26,13 +28,13 @@ class banking {
             System.out.println("\n1 - Login\t2 - Create Account\t3 - Exit");
             choice = getString();
             switch(choice) {
-                case "1":   ac.login();
+                case "1":   if(ac.login())
+                                loggedIn = true;
                             break;
                 case "2":   ac.createAccount();
                             break;
                 case "3":   System.out.println("Have a nice day!");
                             mainCont = false;
-                            exit = true;
                             break;
                 default:    System.out.println("Invalid Input");
             }
@@ -47,15 +49,16 @@ class banking {
             switch(choice) {
                 case "1":   ac.viewFunds();
                             break;
-                case "2":   ac.depositeFunds();;
+                case "2":   ac.depositeFunds();
                             break;
-                case "3":   System.out.println("Deposite Funds");
+                case "3":   ac.withdrawFunds();
                             break;
-                case "4":   System.out.println("Trandsfer Funds");
+                case "4":   ac.transferFunds();
                             break;
                 case "5":   System.out.println("Logging Out");
                             //Expand when accoutns are implemented.        
-                    cont = false;
+                            loggedIn = false;
+                            cont = false;
                             break;
                 case "6":   System.out.println("Apply for Joint Account");
                             break;

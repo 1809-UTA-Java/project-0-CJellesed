@@ -25,7 +25,8 @@ class account {
             this. aNum = aNum;
         }
 
-        protected void login() {
+        protected boolean login() {
+            boolean loggedIn = true;
             System.out.println("\nEnter Username");
             aName = getString();
             System.out.println("\nEnter Password");
@@ -44,16 +45,63 @@ class account {
             if(fName == "") {
                 aName = "";
                 password = "";
+                loggedIn = false;
             }
+            return loggedIn;
         }
         protected void depositeFunds() {
             //Make sure to write this method
             // Also make sure to change 3 from a hardcoded value ie rework login()
+            boolean active = false;
+            try {active = sql.isActive(aName);}
+            catch(SQLException e) {
+                e.printStackTrace();
+            }
+            if(active) {
+                String ammount = getAmmount(0);
+                if(!sql.isConnected())
+                    sql.connect();
+                try { 
+                    sql.deposit(ammount, 3);
+                    System.out.println("New Balance is");
+                    sql.getFunds(aName, password);
+                }
+                catch(SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        protected void withdrawFunds() { 
+            // Also make sure to change 3 from a hardcoded value ie rework login()
+            boolean active = false;
+            try {active = sql.isActive(aName);}
+            catch(SQLException e) {
+                e.printStackTrace();
+            }
+            if(active) {
+                String ammount = getAmmount(1);
+                if(!sql.isConnected())
+                    sql.connect();
+                try {
+                    sql.withdraw(ammount, 3);
+                    System.out.println("New Balance is");
+                    sql.getFunds(aName, password);
+                }
+                catch(SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        protected void transferFunds() {
+            // Also make sure to change 3 from a hardcoded value ie rework login()
             String ammount = getAmmount(1);
+            System.out.println("Enter account number to tranfer to.");
+            //String where = getString();
             if(!sql.isConnected())
                 sql.connect();
             try { 
-                sql.deposit(ammount, 3);
+                sql.withdraw(ammount, 3);
+                sql.deposit(ammount, 2);
                 System.out.println("New Balance is");
                 sql.getFunds(aName, password);
             }
@@ -61,8 +109,6 @@ class account {
                 e.printStackTrace();
             }
         }
-        protected void withdrawFunds() {};
-        protected void transferFunds() {};
         protected void viewFunds() {
             if(!sql.isConnected())
                 sql.connect();
@@ -119,6 +165,11 @@ class account {
                 e.printStackTrace();
             }
         }
+
+        protected void joinAccount() {
+            
+        }
+
         // Currently returns one line Strings from the user.
         static String getString() {
          
