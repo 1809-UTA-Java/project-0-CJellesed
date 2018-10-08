@@ -1,6 +1,9 @@
 package com.revature;
 
 import java.util.*;
+
+import javax.lang.model.util.ElementScanner6;
+
 import java.io.*;
 //import account.java;
 
@@ -41,10 +44,15 @@ class banking {
     }
     static void runUser(account ac) {
         boolean cont = true;
-        //String choice = "";
+        int level = ac.pLevel;
         while(cont) {
             System.out.println("\n1 - View Balance\t2 - Deposit Funds\t3 - Withdraw Funds");
             System.out.println("4 - Transfer Funds\t5 - Logout\t6 - Apply for Joint Account");
+            if(level > 0)
+                System.out.println("\nEmployee Controls:\n7 - View Customers\t8 - View Customer Balance\t9 - Approve Account");
+            if(level == 2)
+                System.out.println("\nAdmin Controls:\n10 - Deposit Funds\t11 - Withdraw Funds\t12 - Transfer Funds\t13 - Cancel Account");
+            System.out.println("\nEnter Selection:");
             choice = getString();
             switch(choice) {
                 case "1":   ac.viewFunds();
@@ -61,6 +69,40 @@ class banking {
                             cont = false;
                             break;
                 case "6":   ac.joinAccount();
+                            break;
+                case "7":   if(level > 0)
+                                System.out.println("View Customers");
+                            else
+                                System.out.println("Invalid Input");  
+                            break;
+                case "8":   if(level > 0)
+                                System.out.println("View Customer Balance");
+                            else
+                                System.out.println("Invalid Input");
+                            break;
+                case "9":   if(level > 0) 
+                                System.out.println("Approve Account");
+                            else
+                                System.out.println("Invalid Input");
+                            break;
+                case "10":  if(level == 2) 
+                                System.out.println("Deposit Funds");
+                            else
+                                System.out.println("Invalid Input");
+                            break;
+                case "11":  if(level == 2) {
+                                System.out.println("Withdraw Funds");
+                            }
+                            break;
+                case "12":  if(level == 2) 
+                                System.out.println("Transfer Funds");
+                            else
+                                System.out.println("Invalid Input");
+                            break;
+                case "13":  if(level == 2) 
+                                System.out.println("Cancel Account");
+                            else
+                                System.out.println("Invalid Input");
                             break;
                 default: System.out.println("Invalid Input");
             }
