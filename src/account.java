@@ -72,7 +72,7 @@ class account {
                 try { 
                     sql.deposit(ammount, aNum);
                     System.out.println("New Balance is");
-                    sql.getFunds(aName, password);
+                    sql.getFunds(aName, password, 0);
                 }
                 catch(SQLException e) {
                     e.printStackTrace();
@@ -93,7 +93,7 @@ class account {
                 try {
                     sql.withdraw(ammount, aNum);
                     System.out.println("New Balance is");
-                    sql.getFunds(aName, password);
+                    sql.getFunds(aName, password, 0);
                 }
                 catch(SQLException e) {
                     e.printStackTrace();
@@ -121,7 +121,7 @@ class account {
                 sql.withdraw(ammount, aNum);
                 sql.deposit(ammount, account);
                 System.out.println("New Balance is");
-                sql.getFunds(aName, password);
+                sql.getFunds(aName, password, 0);
             }
             catch(SQLException e) {
                 e.printStackTrace();
@@ -131,7 +131,7 @@ class account {
             if(!sql.isConnected())
                 sql.connect();
             try { 
-                sql.getFunds(aName, password);
+                sql.getFunds(aName, password, 0);
                 banking.Continue();
             }
             catch(SQLException e) {
@@ -247,7 +247,7 @@ class account {
                 }
                 //Checks to keep from overdrawing.
                 if(check == 1 && valid) {
-                    try { cbalance = sql.getFunds(aName, password); }
+                    try { cbalance = sql.getFunds(aName, password, 0); }
                     catch(SQLException e) {
                         e.printStackTrace();
                     }

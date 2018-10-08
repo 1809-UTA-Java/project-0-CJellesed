@@ -59,10 +59,13 @@ class sql {
         }
     }
     
-    static String getFunds(String uName, String uPassword) throws SQLException {
+    static String getFunds(String uName, String uPassword, int level) throws SQLException {
         Statement stmt = null;
-        String funds = "";
-        String query = "select accnum, (select abalance from accounts where accounts.anum = users.accnum) as temp from users where users.uname = '" + uName + "' and users.password = '" + uPassword + "'";
+        String funds = "", query = "";
+        if(level > 0)
+            query = "select accnum, (select abalance from accounts where accounts.anum = users.accnum) as temp from users where users.uname = '" + uName + "'";
+        else
+            query = "select accnum, (select abalance from accounts where accounts.anum = users.accnum) as temp from users where users.uname = '" + uName + "' and users.password = '" + uPassword + "'";
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -257,5 +260,25 @@ class sql {
             if (stmt != null) { stmt.close(); }
         }
         return ac;
+    }
+
+    static void setAccount(String user, int val, int level) throws SQLException {
+        Statement stmt = null;
+        String query = "";
+        if(level == 2)
+            query = "update users set active = " + val + " where uname = '" + user + "'";
+        else
+            query = "update users set active = " + val + " where uname = '" + user + "' and active = 0";
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst()) {
+                System.out.println("Account not found");
+            }
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
     }
 } 

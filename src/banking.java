@@ -76,12 +76,12 @@ class banking {
                                 System.out.println("Invalid Input");  
                             break;
                 case "8":   if(level > 0)
-                                System.out.println("View Customer Balance");
+                                employee.getBalance();
                             else
                                 System.out.println("Invalid Input");
                             break;
                 case "9":   if(level > 0) 
-                                System.out.println("Approve Account");
+                                employee.setAccount();
                             else
                                 System.out.println("Invalid Input");
                             break;
