@@ -1,36 +1,36 @@
 package com.revature;
 
-class employee extends account implements employeeControls {
+import java.sql.SQLException;
 
-    protected employee(String aName, String password, String fName, int pLevel, int aNum) {
-        super(aName, password, fName, pLevel, aNum);
-    }
-    protected void depositeFunds() {
-
-    }
-    protected void withdrawFunds() {
-
-    }
-    protected void transferFunds() {
-        
-    }
+class employee {
     
-    @Override
-    public void gAccInfo() {
+    static void getUsers() {
+        String choice = "";
+        System.out.println("\nEnter username to look up or press enter to search all.");
+        choice = account.getString();
+        if(choice.isEmpty()) {
+            try { sql.showUsers("", true); }
+            catch(SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try { sql.showUsers(choice, false); }
+            catch(SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
         
-    @Override
     public void gAccBalance() {
 
     }
         
-    @Override
     public void gPInfo() {
         System.out.println("test");
     }
         
-    @Override
     public void gCApplication() {
 
     }

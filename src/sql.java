@@ -134,7 +134,6 @@ class sql {
             if(!rs.isBeforeFirst())
                 System.out.println("\nInvalid Account Info");
             while (rs.next()) {;
-                // remove this var if you decide not to pass anything back.
                 ac.aName = uName;
                 ac.password = uPassword;
                 ac.fName = rs.getString("fName");
@@ -223,5 +222,40 @@ class sql {
             if (stmt != null) { stmt.close(); }
         }
         return joined;
+    }
+
+    
+    static account showUsers(String user, boolean all) throws SQLException {
+        account ac = new account();
+        Statement stmt = null;
+        String query = "", lname = "", email = "";
+        int active = 0, merge = 0;
+        if(all)
+            query = "select * from users";
+        else
+            query = "select * from users where uname = '" + user + "'";
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst())
+                System.out.println("\nNo data found");
+            while (rs.next()) {;
+                ac.aName = rs.getString("uname");
+                ac.password = rs.getString("password");
+                ac.fName = rs.getString("fName");
+                ac.pLevel = rs.getInt("ulevel");
+                ac.aNum = rs.getInt("accnum");
+                lname = rs.getString("lname");
+                email = rs.getString("email");
+                active = rs.getInt("active");
+                merge = rs.getInt("merge");
+                System.out.println("\nAccount [UserName=" + ac.aName + ", FirstName=" + ac.fName + ", LastName=" + lname + ", AccountNumber=" + ac.aNum + ", Email=" + email + ", Password=" + ac.password + ", UserLevel=" + ac.pLevel + ", Active=" + active + ", Merge=" + merge);
+            }
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+        return ac;
     }
 } 

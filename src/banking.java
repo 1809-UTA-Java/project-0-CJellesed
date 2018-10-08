@@ -71,7 +71,7 @@ class banking {
                 case "6":   ac.joinAccount();
                             break;
                 case "7":   if(level > 0)
-                                System.out.println("View Customers");
+                                employee.getUsers();
                             else
                                 System.out.println("Invalid Input");  
                             break;
