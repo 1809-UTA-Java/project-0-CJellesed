@@ -186,11 +186,22 @@ class account {
 
         protected void joinAccount() {
             String userName = "";
-            System.out.println("Enter User Name of the person you want to join with");
-            userName = getString();
-            try { sql.joinAccount(userName, aName); }
-            catch (SQLException e) {
-                e.printStackTrace();
+            boolean joined = true;
+            while(joined) {
+                try { 
+                    System.out.println("Enter User Name of the person you want to join with");
+                    userName = getString();
+                    joined = sql.checkColumn("uname", userName);
+                }
+                catch(SQLException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    System.out.println("Setting user " + userName + "for moerge"); 
+                    sql.joinAccount(userName, aName); }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

@@ -171,14 +171,13 @@ class sql {
         String query = "Select " + column + " from users where " + column + " = '" + value + "'";
         try {
             stmt = connection.createStatement();
-            //stmt.execute(query);
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst()) {
-                System.out.println("Entered option is free");
+                System.out.println("Existing user not found");
                 free = true;
             }
             else
-                System.out.println("\nUsername is taken");
+                System.out.println("\nExisting user found");
         } catch (SQLException e ) {
             e.printStackTrace();
         } finally {
@@ -207,7 +206,8 @@ class sql {
         return active;
     }
 
-    static void joinAccount(String userName, String aName) throws SQLException {
+    static boolean joinAccount(String userName, String aName) throws SQLException {
+        boolean joined = true;
         Statement stmt = null;
         String query = "update users set merge = (select accnum from users where uname = '" + userName + "') where uname = '" + aName + "'";
         try {
@@ -215,11 +215,13 @@ class sql {
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst()) {
                 System.out.println("User not found");
+                joined = false;
             }
         } catch (SQLException e ) {
             e.printStackTrace();
         } finally {
             if (stmt != null) { stmt.close(); }
         }
+        return joined;
     }
 } 
