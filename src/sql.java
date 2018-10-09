@@ -7,9 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
 import java.io.*;
+import org.apache.log4j.Logger;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.*;
+
+
 
 class sql {
-    
+    private static Logger logger = Logger.getLogger(sql.class);
     static Connection connection = null;
     static void disconnect() {
         try {
@@ -27,6 +32,9 @@ class sql {
     }
 
     static void connect() {
+        BasicConfigurator.configure();
+        //logger.setLevel(Level.OFF);
+            
         //System.out.println("-------- Oracle JDBC Connection Testing ------");
 
         try {
@@ -54,6 +62,7 @@ class sql {
 
         if (connection != null) {
             System.out.println("Connection Successful");
+            logger.info("Sucessfully Connected");
         } else {
             System.out.println("\nFailed to connect");
         }
@@ -100,7 +109,8 @@ class sql {
                 found = false;
             }
             else
-                System.out.println("\nDeposit Successful");
+                logger.info("Deposit Successful");
+                //System.out.println("\nDeposit Successful");
         } catch (SQLException e ) {
             e.printStackTrace();
         } finally {
