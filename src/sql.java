@@ -20,7 +20,7 @@ class sql {
         try {
             connection.close();
         } catch(SQLException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -41,7 +41,7 @@ class sql {
             DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
         } catch (SQLException e) {
             System.out.println("Where is your Oracle JDBC Driver?");
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return;
         }
 
@@ -55,16 +55,17 @@ class sql {
         } catch (SQLException e) {
 
             System.out.println("Connection Failed! Check output console");
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return;
 
         }
 
         if (connection != null) {
-            System.out.println("Connection Successful");
+            //System.out.println("Connection Successful");
             logger.info("Sucessfully Connected");
         } else {
-            System.out.println("\nFailed to connect");
+            logger.error("Failed to connect");
+            //System.out.println("\nFailed to connect");
         }
     }
     
@@ -83,13 +84,12 @@ class sql {
                 System.out.println("\nInvalid Account Info");
             while (rs.next()) {
                 System.out.println("\nAccount: " + rs.getString("ACCNUM"));
-                // remove this var if you decide not to pass anything back.
                 funds = rs.getString("TEMP");
                 System.out.println("Current Balance: " + funds);
                 //banking.Continue();
             }
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -102,17 +102,17 @@ class sql {
         String query = "update accounts set abalance = abalance + " + money + " where anum =  " + account;
         try {
             stmt = connection.createStatement();
-            //stmt.execute(query);
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst()) {
-                System.out.println("Deposit failed");
+                //System.out.println("Deposit failed");
+                logger.error("Deposit Failed");
                 found = false;
             }
             else
                 logger.info("Deposit Successful");
                 //System.out.println("\nDeposit Successful");
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -125,7 +125,6 @@ class sql {
         String query = "update accounts set abalance = abalance - " + money + " where anum =  " + account;
         try {
             stmt = connection.createStatement();
-            //stmt.execute(query);
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst()) {
                 System.out.println("Withdraw failed?");
@@ -133,7 +132,7 @@ class sql {
             else
                 System.out.println("\nWithdraw Successful");
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -143,12 +142,12 @@ class sql {
         account ac = new account();
         Statement stmt = null;
         String name = "";
-        String query = "select * from users where uname = '" + uName + "' and password = '" + uPassword + "'";
+        String query = "select * from users where uname = '" + uName + "' and password = '" + uPassword + "' and active = 1";
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst())
-                System.out.println("\nInvalid Account Info");
+                System.out.println("\nInvalid or Inactive Account");
             while (rs.next()) {;
                 ac.aName = uName;
                 ac.password = uPassword;
@@ -158,7 +157,7 @@ class sql {
                 System.out.println("Welcome: " + name);
             }
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -173,7 +172,7 @@ class sql {
             stmt = connection.createStatement();
             stmt.execute(query);
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());;
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -194,7 +193,7 @@ class sql {
             else
                 System.out.println("\nExisting user found");
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -214,7 +213,7 @@ class sql {
                 active = false;
             }
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -233,7 +232,7 @@ class sql {
                 joined = false;
             }
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -268,7 +267,7 @@ class sql {
                 System.out.println("\nAccount [UserName=" + ac.aName + ", FirstName=" + ac.fName + ", LastName=" + lname + ", AccountNumber=" + ac.aNum + ", Email=" + email + ", Password=" + ac.password + ", UserLevel=" + ac.pLevel + ", Active=" + active + ", Merge=" + merge);
             }
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }
@@ -289,7 +288,7 @@ class sql {
                 System.out.println("Account not found");
             }
         } catch (SQLException e ) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } finally {
             if (stmt != null) { stmt.close(); }
         }

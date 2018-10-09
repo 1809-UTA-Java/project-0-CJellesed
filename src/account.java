@@ -41,13 +41,6 @@ class account {
             catch(SQLException e) {
                 e.printStackTrace();
             }
-            //If the login was bad, Reset the name and password to empty. aName is currently checked for valid logins.
-            // aName == "" is === to Logged out atm.
-            // if(fName == "") {
-            //     aName = "";
-            //     password = "";
-            //     loggedIn = false;
-            // }
             aName = ac.aName;
             password = ac.password;
             fName = ac.fName;
@@ -65,27 +58,27 @@ class account {
             }
             if(active) {
                 String ammount = getAmmount(0);
-                if(!sql.isConnected())
-                    sql.connect();
-                try { 
-                    sql.deposit(ammount, aNum);
-                    System.out.println("New Balance is");
-                    sql.getFunds(aName, password, 0);
-                }
-                catch(SQLException e) {
-                    e.printStackTrace();
+                if(!ammount.equals("exit")) {
+                    if(!sql.isConnected())
+                        sql.connect();
+                    try { 
+                        sql.deposit(ammount, aNum);
+                        System.out.println("New Balance is");
+                        sql.getFunds(aName, password, 0);
+                    }
+                    catch(SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
         protected void withdrawFunds() { 
-            // Also make sure to change 3 from a hardcoded value ie rework login()
-            boolean active = false;
-            try {active = sql.isActive(aName);}
+            try {sql.isActive(aName);}
             catch(SQLException e) {
                 e.printStackTrace();
             }
-            if(active) {
-                String ammount = getAmmount(1);
+            String ammount = getAmmount(1);
+            if(!ammount.equals("exit")) {
                 if(!sql.isConnected())
                     sql.connect();
                 try {
@@ -99,30 +92,31 @@ class account {
             }
         }
         protected void transferFunds() {
-            // Also make sure to change 3 from a hardcoded value ie rework login()
             String ammount = getAmmount(1);
             boolean correct = false;
             int account = 0;
-            while(!correct) {
+            if(!ammount.equals("exit")) {
+                while(!correct) {
+                    try { 
+                        System.out.println("Enter account number to tranfer to.");
+                        account = Integer.parseInt(getString());
+                        correct = true;
+                    }
+                    catch(Exception e) { 
+                        System.out.println("Must enter an integer"); 
+                    }
+                }
+                if(!sql.isConnected())
+                    sql.connect();
                 try { 
-                    System.out.println("Enter account number to tranfer to.");
-                    account = Integer.parseInt(getString());
-                    correct = true;
+                    sql.withdraw(ammount, aNum);
+                    sql.deposit(ammount, account);
+                    System.out.println("New Balance is");
+                    sql.getFunds(aName, password, 0);
                 }
-                catch(Exception e) { 
-                    System.out.println("Must enter an integer"); 
+                catch(SQLException e) {
+                    e.printStackTrace();
                 }
-            }
-            if(!sql.isConnected())
-                sql.connect();
-            try { 
-                sql.withdraw(ammount, aNum);
-                sql.deposit(ammount, account);
-                System.out.println("New Balance is");
-                sql.getFunds(aName, password, 0);
-            }
-            catch(SQLException e) {
-                e.printStackTrace();
             }
         }
         protected void viewFunds() {
@@ -220,42 +214,43 @@ class account {
             boolean valid = false, cont = true;
             double number = 0, balance = 0;
             String ammount = "", cbalance = "";
-
+            
             while(!valid && cont) {
                 valid = true;
 
                 System.out.println("\nEnter ammount");
                 ammount = getString();
+                if(!ammount.equals("exit")) {
+                    System.out.println(ammount);
 
-                System.out.println(ammount);
-
-                try { number = Double.parseDouble(ammount); }
-                catch(Exception e) {
-                    System.out.println("\nInvalid input. Enter in the form of 50.00 or 5000.00 or 500\nMake sure to leave out commas and $");
-                    System.out.println("\nEnter another value or type exit"); 
-                    if(ammount.equals("exit")) {
-                        cont = false;
-                        break;
-                    }
-                    valid = false;
-                }
-                if (number < 0) {
-                    System.out.println("Value must be possitive.");
-                    valid = false;
-                }
-                //Checks to keep from overdrawing.
-                if(check == 1 && valid) {
-                    try { cbalance = sql.getFunds(aName, password, 0); }
-                    catch(SQLException e) {
-                        e.printStackTrace();
-                    }
-                    try { balance = Double.parseDouble(cbalance); }
+                    try { number = Double.parseDouble(ammount); }
                     catch(Exception e) {
-                        e.printStackTrace(); 
-                    }
-                    if(number > balance && number > 0) {
+                        System.out.println("\nInvalid input. Enter in the form of 50.00 or 5000.00 or 500\nMake sure to leave out commas and $");
+                        System.out.println("\nEnter another value or type exit"); 
+                        if(ammount.equals("exit")) {
+                            cont = false;
+                            break;
+                        }
                         valid = false;
-                        System.out.println("\nInsuficient Funds.");
+                    }
+                    if (number < 0) {
+                        System.out.println("Value must be possitive.");
+                        valid = false;
+                    }
+                    //Checks to keep from overdrawing.
+                    if(check == 1 && valid) {
+                        try { cbalance = sql.getFunds(aName, password, 0); }
+                        catch(SQLException e) {
+                            e.printStackTrace();
+                        }
+                        try { balance = Double.parseDouble(cbalance); }
+                        catch(Exception e) {
+                            e.printStackTrace(); 
+                        }
+                        if(number > balance && number > 0) {
+                            valid = false;
+                            System.out.println("\nInsuficient Funds.");
+                        }
                     }
                 }
             }
