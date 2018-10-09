@@ -87,15 +87,17 @@ class sql {
         return funds;
     }
 
-    static void deposit(String money, int account) throws SQLException {
+    static boolean deposit(String money, int account) throws SQLException {
         Statement stmt = null;
+        boolean found = true;
         String query = "update accounts set abalance = abalance + " + money + " where anum =  " + account;
         try {
             stmt = connection.createStatement();
             //stmt.execute(query);
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst()) {
-                System.out.println("Deposit failed?");
+                System.out.println("Deposit failed");
+                found = false;
             }
             else
                 System.out.println("\nDeposit Successful");
@@ -104,6 +106,7 @@ class sql {
         } finally {
             if (stmt != null) { stmt.close(); }
         }
+        return found;
     }
 
     //This could be merged with deposit, but oh well. 

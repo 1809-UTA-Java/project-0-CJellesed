@@ -58,8 +58,6 @@ class account {
             return loggedIn;
         }
         protected void depositeFunds() {
-            //Make sure to write this method
-            // Also make sure to change 3 from a hardcoded value ie rework login()
             boolean active = false;
             try {active = sql.isActive(aName);}
             catch(SQLException e) {
@@ -262,5 +260,17 @@ class account {
                 }
             }
             return ammount;
+        }
+
+        static Integer getNum() {
+            Integer num = 0;
+            while(num == 0) {
+                try { num = Integer.parseInt(getString()); }
+                catch(Exception e) {
+                    //e.printStackTrace();
+                    System.out.println("Must enter a valid int:");
+                }
+            }
+            return num;
         }
 }

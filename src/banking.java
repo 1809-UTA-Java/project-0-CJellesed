@@ -86,21 +86,20 @@ class banking {
                                 System.out.println("Invalid Input");
                             break;
                 case "10":  if(level == 2) 
-                                System.out.println("Deposit Funds");
+                                admin.depositeFunds(ac);
                             else
                                 System.out.println("Invalid Input");
                             break;
-                case "11":  if(level == 2) {
-                                System.out.println("Withdraw Funds");
-                            }
+                case "11":  if(level == 2)
+                                admin.withdrawFunds(ac);
                             break;
                 case "12":  if(level == 2) 
-                                System.out.println("Transfer Funds");
+                                admin.transferFunds(ac);
                             else
                                 System.out.println("Invalid Input");
                             break;
                 case "13":  if(level == 2) 
-                                System.out.println("Cancel Account");
+                                admin.cancelAccount();
                             else
                                 System.out.println("Invalid Input");
                             break;

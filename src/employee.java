@@ -57,7 +57,7 @@ class employee {
                 set = true;
             }
         }
-        try { sql.setAccount(user, approve, 1); }
+        try { sql.setAccount(user, approve, 0); }
         catch(SQLException e) {
             e.printStackTrace();
         }
