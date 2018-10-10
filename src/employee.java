@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import jdk.nashorn.internal.ir.GetSplitState;
 
 class employee {
-    
+    /**
+     * alls the sql get user function. asks the user to either hit enter or enter a username
+     */
     static void getUsers() {
         String choice = "";
         System.out.println("\nEnter username to look up or press enter to search all.");
@@ -24,7 +26,9 @@ class employee {
         }
 
     }
-        
+    /**
+     * asks for a username and calls the sql getfunds()
+     */
     static void getBalance() {
         String user = "";
         System.out.println("Enter Username");
@@ -35,7 +39,9 @@ class employee {
         }
 
     }
-        
+    /**
+     * asks for a username and to enter 1 or 2. then calls the sql set account function.
+     */
     static void setAccount() {
         boolean set = false;
         String user = "", choice = "";
@@ -66,7 +72,10 @@ class employee {
             e.printStackTrace();
         }
     }
-
+    /**
+     * currently asks for two users and their account numbers. the funds of each account are merged into the first and both
+     * now share account 1.
+     */
     static void approveMerge() {
         String userOne = "", userTwo = "";
         Integer UOneAccount = 0, UTwoAccount = 0;

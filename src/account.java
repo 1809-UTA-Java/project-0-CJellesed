@@ -195,7 +195,7 @@ class account {
                     e.printStackTrace();
                 }
                 try {
-                    System.out.println("Setting user " + userName + "for merge"); 
+                    System.out.println("Setting user " + userName + " for merge"); 
                     sql.joinAccount(userName, aName); }
                 catch (SQLException e) {
                     e.printStackTrace();

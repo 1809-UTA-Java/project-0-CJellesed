@@ -14,6 +14,13 @@ import java.io.*;
 class banking {
     static String choice = "";
     static boolean mainCont = true , loggedIn = false;
+
+    /**
+     * has two while loops, the first allows you to close the program, login or create account. logging
+     * in takes you into the inner while while logging out takes you back to the first while. The inner while has
+     * all the other functionality and displays options based on the login priv level.
+     * @param args
+     */
     public static void main(String[] args) {
         System.out.println("Welcome to the bank\n");
         account ac = new account();
@@ -22,10 +29,13 @@ class banking {
             if(loggedIn)
                 runUser(ac);
         }
-        
-        
+        sql.disconnect();
     }
 
+    /**
+     * displays 3 options anc calls them. if an invalid choice is made you go back to the outer while in main.
+     * @param ac account class object.
+     */
     static void login(account ac) {
         //boolean mainCont = true;
             System.out.println("\n1 - Login\t2 - Create Account\t3 - Exit");
@@ -42,6 +52,10 @@ class banking {
                 default:    System.out.println("Invalid Input");
             }
     }
+    /**
+     * main driver for the program. checks the user level and displays options.
+     * @param ac account class object.
+     */
     static void runUser(account ac) {
         boolean cont = true;
         int level = ac.pLevel;
@@ -110,6 +124,10 @@ class banking {
             }
         }
     }
+    /**
+     * Grabs and returns a string from the scanner.
+     * @return a string
+     */
     // Currently returns one line Strings from the user.
     static String getString() {
          
@@ -122,6 +140,9 @@ class banking {
         return userIn;
     }
 
+    /**
+     * asks the user for input, used to pasuse the loop when needed.
+     */
     static void Continue() {
         System.out.println("\nPress any key to continue.");
         try {

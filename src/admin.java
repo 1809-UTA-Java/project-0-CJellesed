@@ -7,6 +7,10 @@ import javax.lang.model.util.ElementScanner6;
 
 class admin {
 
+    /**
+     * asks for an account number and ammount to deposit. admins can deposit any positive number
+     * to any account.
+     */
     static void depositeFunds(account ac) {
         String ammount = ac.getAmmount(0);
         Integer acc = 0;
@@ -26,6 +30,11 @@ class admin {
         }
     }
 
+    /**
+     * asks for an account number and ammount to withdraw. addmins can withdraw any number and take the balance
+     * below 0. At that point the customer owes the bank money.
+     * @param ac account class object
+     */
     static void withdrawFunds(account ac) { 
         String ammount = ac.getAmmount(0);
         if(!ammount.equals("exit")) {
@@ -41,11 +50,15 @@ class admin {
             }
         }
     }
+    /**
+     * takes an ammount and two account numbers, the balance can drop below 0.
+     * @param ac account class object.
+     */
     static void transferFunds(account ac) {
         String ammount = ac.getAmmount(0);
         Integer accFrom = 0, accTo = 0;
         if(!ammount.equals("exit")) {
-            System.out.println("Here: " + ammount);
+            //System.out.println("Here: " + ammount);
             System.out.println("Enter account number to tranfer from.");
             accFrom = account.getNum();
             System.out.println("Enter account number to tranfer to.");
@@ -61,8 +74,9 @@ class admin {
             }
         }
     }
-    // Currently can only cancel. Normally I would let admins freely change these values.
-    // I can add that in if time permits.
+    /**
+     * takes a username and cancels that users account.
+     */
     static void cancelAccount() {
         String user = "";
         System.out.println("Enter Username");

@@ -305,10 +305,10 @@ class sql {
     }
 
     /**
-     * 
-     * @param userName
-     * @param aName
-     * @return
+     * takes two usernames and sets the merge column to the account number of ther others account
+     * @param userName other account
+     * @param aName users account
+     * @return true if other account is found.
      * @throws SQLException
      */
     static boolean joinAccount(String userName, String aName) throws SQLException {
@@ -330,7 +330,10 @@ class sql {
         return joined;
     }
 
-    
+    /**
+     * takes a privledge level and an input. if the input is empty string and priv > 0 it shows all level 0 users.
+     * else it looks for the username that was sent in and prints them.
+     */
     static account showUsers(String user, int val) throws SQLException {
         account ac = new account();
         Statement stmt = null;
@@ -369,6 +372,13 @@ class sql {
         return ac;
     }
 
+    /**
+     * an employee can set a new account to active or denied. an admin can set any account to active or denied.
+     * @param user account name to change
+     * @param val should be -1 or 1
+     * @param level privledge level
+     * @throws SQLException
+     */
     static void setAccount(String user, int val, int level) throws SQLException {
         Statement stmt = null;
         String query = "";
@@ -389,6 +399,12 @@ class sql {
         }
     }
 
+    /**
+     * takes a username and account numver and sets that users account numver to the passed value.
+     * @param userTwo Username
+     * @param accOne account number
+     * @throws SQLException
+     */
     static void setAccountNum(String userTwo, int accOne) throws SQLException {
         Statement stmt = null;
         String query = "";
