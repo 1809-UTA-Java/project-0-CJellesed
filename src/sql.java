@@ -345,7 +345,7 @@ class sql {
         else if(val == 2)
             query = "select * from users where uname = '" + user + "' and ulevel = 0";
         else if(val == 3)
-            query = "select * from users where merge <> 0";
+            query = "select * from users where merge > 0";
 
         try {
             stmt = connection.createStatement();

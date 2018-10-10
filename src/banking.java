@@ -29,7 +29,8 @@ class banking {
             if(loggedIn)
                 runUser(ac);
         }
-        sql.disconnect();
+        if(sql.isConnected())
+            sql.disconnect();
     }
 
     /**
