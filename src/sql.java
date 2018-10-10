@@ -8,13 +8,12 @@ import java.sql.Statement;
 import java.util.*;
 import java.io.*;
 import org.apache.log4j.Logger;
-import org.apache.log4j.BasicConfigurator;
+//import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.*;
 
 
-
 class sql {
-    private static Logger logger = Logger.getLogger(sql.class);
+    public static Logger logger = Logger.getLogger(sql.class);
     static Connection connection = null;
     static void disconnect() {
         try {
@@ -79,14 +78,12 @@ class sql {
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
-            //With the account implementation this if should never be hit.
             if(!rs.isBeforeFirst())
                 System.out.println("\nInvalid Account Info");
             while (rs.next()) {
                 System.out.println("\nAccount: " + rs.getString("ACCNUM"));
                 funds = rs.getString("TEMP");
                 System.out.println("Current Balance: " + funds);
-                //banking.Continue();
             }
         } catch (SQLException e ) {
             logger.error(e.getMessage());
@@ -127,10 +124,13 @@ class sql {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             if(!rs.isBeforeFirst()) {
-                System.out.println("Withdraw failed?");
+                //System.out.println("Withdraw failed");
+                logger.error("Withdraw Failed");
             }
-            else
-                System.out.println("\nWithdraw Successful");
+            else {
+                logger.info("Withdraw Successful");
+                //System.out.println("\nWithdraw Successful");
+            }
         } catch (SQLException e ) {
             logger.error(e.getMessage());
         } finally {
@@ -171,6 +171,23 @@ class sql {
         try {
             stmt = connection.createStatement();
             stmt.execute(query);
+            logger.info("Account Created");
+        } catch (SQLException e ) {
+            logger.error(e.getMessage());;
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+        return name;
+    }
+
+    static String createMoneyAccount(String uName) throws SQLException {
+        Statement stmt = null;
+        String name = "";
+        String query = "insert into accounts values ((select accnum from users where uname = '" + uName + "'), 0)";
+        try {
+            stmt = connection.createStatement();
+            stmt.execute(query);
+            logger.info("Account Created");
         } catch (SQLException e ) {
             logger.error(e.getMessage());;
         } finally {
@@ -245,10 +262,11 @@ class sql {
         Statement stmt = null;
         String query = "", lname = "", email = "";
         int active = 0, merge = 0;
+
         if(all)
-            query = "select * from users";
+            query = "select * from users where ulevel = 0";
         else
-            query = "select * from users where uname = '" + user + "'";
+            query = "select * from users where uname = '" + user + "' and ulevel = 0";
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);

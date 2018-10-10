@@ -68,7 +68,10 @@ class admin {
         System.out.println("Enter Username");
         user = account.getString();
 
-        try { sql.setAccount(user, -1, 0); }
+        try { 
+            sql.setAccount(user, -1, 2);
+            System.out.println("Account Canceled");
+        }
         catch(SQLException e) {
             e.printStackTrace();
         }

@@ -51,9 +51,13 @@ class employee {
 
                 set = true;
                 approve = 1;
+                try { sql.createMoneyAccount(user); }
+                catch(SQLException e) {
+                    e.printStackTrace();
+                }
             }
             else if (choice.equals("2")) {
-                approve = 2;
+                approve = -1;
                 set = true;
             }
         }

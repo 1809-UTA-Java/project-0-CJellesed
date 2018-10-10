@@ -8,8 +8,8 @@ import java.io.*;
 //import account.java;
 
 // run with - java -cp ./bin/ com.revature.banking 
-// javac -cp .:ojdbc8.jar src/* -d bin/
-// java -cp bin:ojdbc8.jar com.revature.banking
+// javac -cp .:ojdbc8.jar:log4j-1.2.17.jar:junit-4.10.jar src/* -d bin/
+// java -cp bin:ojdbc8.jar:log4j-1.2.17.jar:junit-4.10.jar com.revature.banking
 
 class banking {
     static String choice = "";

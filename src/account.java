@@ -8,6 +8,7 @@ import java.io.*;
 class account {
         protected String aName, fName, password;
         protected int pLevel, aNum;
+
         // I think a default constructor should be left out, because we want no empty accounts. Check later.
         protected account() {
             this.aName = "";
@@ -48,6 +49,8 @@ class account {
             aNum = ac.aNum;
             if(aName == "")
                 loggedIn = false;
+            else
+                sql.logger.info(aName + " Logged In");
             return loggedIn;
         }
         protected void depositeFunds() {
