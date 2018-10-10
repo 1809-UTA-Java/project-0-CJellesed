@@ -3,29 +3,19 @@ package com.revature;
 
 import java.sql.SQLException;
 import java.util.*;
+
+import com.sun.media.jfxmedia.logging.Logger;
+
 import java.io.*;
 
 class account {
         protected String aName, fName, password;
         protected int pLevel, aNum;
 
-        // I think a default constructor should be left out, because we want no empty accounts. Check later.
-        protected account() {
-            this.aName = "";
-            this.password = "";
-            this.fName = "";
-            this.pLevel = 0;
-            this. aNum = 0;
-        }
-
-        protected account(String aName, String password, String fName, int pLevel, int aNum) {
-            this.aName = aName;
-            this.password = password;
-            this.fName = fName;
-            this.pLevel = pLevel;
-            this. aNum = aNum;
-        }
-
+        /**
+         * Asks the user for a username and password that is checked against the database.
+         * @return returns true if the loggin worked
+         */
         protected boolean login() {
             boolean loggedIn = true;
             account ac = new account();
@@ -47,39 +37,37 @@ class account {
             fName = ac.fName;
             pLevel = ac.pLevel;
             aNum = ac.aNum;
-            if(aName == "")
+            if(aName == null)
                 loggedIn = false;
             else
                 sql.logger.info(aName + " Logged In");
             return loggedIn;
         }
+        /**
+         * Asks the user for a number. if the enntered ammount is valid and not exit, the 
+         * sql deposit() is called to enter the money into th esers account.
+         */
         protected void depositeFunds() {
-            boolean active = false;
-            try {active = sql.isActive(aName);}
-            catch(SQLException e) {
-                e.printStackTrace();
-            }
-            if(active) {
-                String ammount = getAmmount(0);
-                if(!ammount.equals("exit")) {
-                    if(!sql.isConnected())
-                        sql.connect();
-                    try { 
-                        sql.deposit(ammount, aNum);
-                        System.out.println("New Balance is");
-                        sql.getFunds(aName, password, 0);
-                    }
-                    catch(SQLException e) {
-                        e.printStackTrace();
-                    }
+            String ammount = getAmmount(0);
+            if(!ammount.equals("exit")) {
+                if(!sql.isConnected())
+                    sql.connect();
+                try { 
+                    sql.deposit(ammount, aNum);
+                    System.out.println("New Balance is");
+                    sql.getFunds(aName, password, 0);
+                }
+                catch(SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }
+        /**
+         * Asks the user for a number, if a valid number was entered and not exit. Then the sql withdraw
+         * function is called and the funds are removed from the account. if exit was selected, then the function
+         * closes without doing anything.
+         */
         protected void withdrawFunds() { 
-            try {sql.isActive(aName);}
-            catch(SQLException e) {
-                e.printStackTrace();
-            }
             String ammount = getAmmount(1);
             if(!ammount.equals("exit")) {
                 if(!sql.isConnected())
@@ -94,34 +82,43 @@ class account {
                 }
             }
         }
+        /**
+         * Asks for an ammount, if not exit it asks for an account number. the account number is checked and
+         * if valid, deposit is called on the passed account while withdraw is called on the users account.
+         * if the account was not valid the function ends instead.
+         */
         protected void transferFunds() {
             String ammount = getAmmount(1);
-            boolean correct = false;
-            int account = 0;
+            Integer acc = 0;
+            boolean missing = true;
             if(!ammount.equals("exit")) {
-                while(!correct) {
-                    try { 
-                        System.out.println("Enter account number to tranfer to.");
-                        account = Integer.parseInt(getString());
-                        correct = true;
-                    }
-                    catch(Exception e) { 
-                        System.out.println("Must enter an integer"); 
-                    }
-                }
+                System.out.println("Enter account number to tranfer to.");
+                acc = getNum();
                 if(!sql.isConnected())
                     sql.connect();
                 try { 
-                    sql.withdraw(ammount, aNum);
-                    sql.deposit(ammount, account);
-                    System.out.println("New Balance is");
-                    sql.getFunds(aName, password, 0);
+                    missing = sql.checkColumn("accnum", acc.toString()); 
+                    System.out.println(acc.toString() + "\t" + missing);
                 }
                 catch(SQLException e) {
                     e.printStackTrace();
                 }
+                if(!missing) {
+                    try { 
+                        sql.withdraw(ammount, aNum);
+                        sql.deposit(ammount, acc);
+                        System.out.println("New Balance is");
+                        sql.getFunds(aName, password, 0);
+                    }
+                    catch(SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
+        /**
+         * calls the getFunds() function in the sql class.
+         */
         protected void viewFunds() {
             if(!sql.isConnected())
                 sql.connect();
@@ -134,8 +131,11 @@ class account {
             }
         }
 
+        /**
+         * asks the user for a username and email. these two values are checked against the database to see if they are taken.
+         * afterwords it asks the user for the other account info and passes it to the createAccount sql function.
+         */
         void createAccount() {
-            //Work on the getter and setters here.
             String uname = "", password = "", fname = "", lname = "", email = "";
             boolean free = false;
             while (!free) {
@@ -179,6 +179,9 @@ class account {
             }
         }
 
+        /**
+         * Asks the user for anothers username. if the username exists the sql merge function is called which stores your request.
+         */
         protected void joinAccount() {
             String userName = "";
             boolean joined = true;
@@ -192,7 +195,7 @@ class account {
                     e.printStackTrace();
                 }
                 try {
-                    System.out.println("Setting user " + userName + "for moerge"); 
+                    System.out.println("Setting user " + userName + "for merge"); 
                     sql.joinAccount(userName, aName); }
                 catch (SQLException e) {
                     e.printStackTrace();
@@ -200,7 +203,10 @@ class account {
             }
         }
 
-        // Currently returns one line Strings from the user.
+        /**
+         * Grabs the next single line string from the user. is currently being used in most class files.
+         * @return returns a string
+         */
         static String getString() {
          
             Scanner AccOp = new Scanner(System.in);
@@ -212,7 +218,10 @@ class account {
             return userIn;
         }
 
-        //Check should be 0 or 1. 0 for depossit nad 1 for any kind of withdrawal.
+        /** 
+         * takes a 0 or 1, 0 just checks that the user enters a valid integer.
+         * 1 also check that the valid integer is less than his max account balance.
+         */
         String getAmmount(int check) {
             boolean valid = false, cont = true;
             double number = 0, balance = 0;
@@ -260,6 +269,10 @@ class account {
             return ammount;
         }
 
+        /**
+         * grabs and returns a single int. this is getting called alot so i placed the code here.
+         * @return returns an int from the user.
+         */
         static Integer getNum() {
             Integer num = 0;
             while(num == 0) {

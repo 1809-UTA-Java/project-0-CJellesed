@@ -49,7 +49,7 @@ class banking {
             System.out.println("\n1 - View Balance\t2 - Deposit Funds\t3 - Withdraw Funds");
             System.out.println("4 - Transfer Funds\t5 - Logout\t6 - Apply for Joint Account");
             if(level > 0)
-                System.out.println("\nEmployee Controls:\n7 - View Customers\t8 - View Customer Balance\t9 - Approve Account");
+                System.out.println("\nEmployee Controls:\n7 - View Customers\t8 - View Customer Balance\t9 - Approve Account\t14 - Finalize Merge");
             if(level == 2)
                 System.out.println("\nAdmin Controls:\n10 - Deposit Funds\t11 - Withdraw Funds\t12 - Transfer Funds\t13 - Cancel Account");
             System.out.println("\nEnter Selection:");
@@ -103,6 +103,9 @@ class banking {
                             else
                                 System.out.println("Invalid Input");
                             break;
+                case "14":  if(level > 0)
+                                employee.approveMerge();
+                                break;
                 default: System.out.println("Invalid Input");
             }
         }

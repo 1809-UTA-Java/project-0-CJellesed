@@ -15,6 +15,10 @@ import org.apache.log4j.*;
 class sql {
     public static Logger logger = Logger.getLogger(sql.class);
     static Connection connection = null;
+
+    /**
+     * clossed the connection to the database.
+     */
     static void disconnect() {
         try {
             connection.close();
@@ -23,6 +27,10 @@ class sql {
         }
     }
 
+    /**
+     * checks for a valid connection and returns a bool
+     * @return returns true if connected already,
+     */
     static boolean isConnected() {
         if(connection != null)
             return true;
@@ -30,6 +38,9 @@ class sql {
             return false;
     }
 
+    /**
+     * created the database connection with JDBC and the bank account
+     */
     static void connect() {
         BasicConfigurator.configure();
         //logger.setLevel(Level.OFF);
@@ -68,6 +79,14 @@ class sql {
         }
     }
     
+    /**
+     * has two queries one for normal users and another for employees or admins. rerns the requested users account balance.
+     * @param uName is pulled from the value stored in accounts when customers call this or is passed in by a employee account
+     * @param uPassword is pulled from account or can be "" or anything technically if an employee or admin calls this.
+     * @param level used to choose which query to use. should be 0 1 or 2
+     * @return returns a string with the account balance in it.
+     * @throws SQLException 
+     */
     static String getFunds(String uName, String uPassword, int level) throws SQLException {
         Statement stmt = null;
         String funds = "", query = "";
@@ -93,6 +112,13 @@ class sql {
         return funds;
     }
 
+    /**
+     * takes an ammount and account number and inserts the money into the users account in the database.
+     * @param money value to be stored to the account balance in the database
+     * @param account account number in the database
+     * @return bool for id the account number existed.
+     * @throws SQLException
+     */
     static boolean deposit(String money, int account) throws SQLException {
         Statement stmt = null;
         boolean found = true;
@@ -116,7 +142,12 @@ class sql {
         return found;
     }
 
-    //This could be merged with deposit, but oh well. 
+    /**
+     * takes a money valu and an account number. removes the desired ammount from the database.
+     * @param money value to be removed
+     * @param account account to take from
+     * @throws SQLException
+     */
     static void withdraw(String money, int account) throws SQLException {
         Statement stmt = null;
         String query = "update accounts set abalance = abalance - " + money + " where anum =  " + account;
@@ -138,6 +169,14 @@ class sql {
         }
     }
 
+    /**
+     * takes a username and password. this works if it finds an anctive account and returns an empty account
+     * object if the user was not found or was inactive.
+     * @param uName username in the database
+     * @param uPassword password in the database
+     * @return an account object that has all values filled if the user was found or is empty.
+     * @throws SQLException
+     */
     static account login(String uName, String uPassword) throws SQLException {
         account ac = new account();
         Statement stmt = null;
@@ -164,6 +203,16 @@ class sql {
         return ac;
     }
 
+    /**
+     * Takes all values and passes them into the database. These values should works as they were checked before being passed in.
+     * @param uName works and the primary key in the database
+     * @param uPassword
+     * @param fName
+     * @param lName
+     * @param email
+     * @return THis probably needs to be changed.
+     * @throws SQLException
+     */
     static String createAccount(String uName, String uPassword, String fName, String lName, String email) throws SQLException {
         Statement stmt = null;
         String name = "";
@@ -180,10 +229,14 @@ class sql {
         return name;
     }
 
-    static String createMoneyAccount(String uName) throws SQLException {
+    /**
+     * is called when an employee aproves a new account. this function adds a row to accounts where money can be stored. 
+     * getFunds() would return a null before this point and all other functions would fail. Sets balance to 0.
+     */
+    static String createMoneyAccount(String uName, Double num) throws SQLException {
         Statement stmt = null;
         String name = "";
-        String query = "insert into accounts values ((select accnum from users where uname = '" + uName + "'), 0)";
+        String query = "insert into accounts values ((select accnum from users where uname = '" + uName + "'), " + num + ")";
         try {
             stmt = connection.createStatement();
             stmt.execute(query);
@@ -196,6 +249,14 @@ class sql {
         return name;
     }
 
+    /**
+     * this takes a column name from the database and a value to check for. Note that the value returns false if it is found as the
+     * check was initially used to look for unused usernames.
+     * @param column
+     * @param value
+     * @return returns false if a match is found.
+     * @throws SQLException
+     */
     static boolean checkColumn(String column, String value) throws SQLException {
         boolean free = false;
         Statement stmt = null;
@@ -217,6 +278,12 @@ class sql {
         return free;
     }
 
+    /**
+     * returns true or false based on if the passed username has an active account.
+     * @param user
+     * @return returns true or false
+     * @throws SQLException
+     */
     static boolean isActive(String user) throws SQLException {
         boolean active = true;
         Statement stmt = null;
@@ -237,6 +304,13 @@ class sql {
         return active;
     }
 
+    /**
+     * 
+     * @param userName
+     * @param aName
+     * @return
+     * @throws SQLException
+     */
     static boolean joinAccount(String userName, String aName) throws SQLException {
         boolean joined = true;
         Statement stmt = null;
@@ -257,16 +331,19 @@ class sql {
     }
 
     
-    static account showUsers(String user, boolean all) throws SQLException {
+    static account showUsers(String user, int val) throws SQLException {
         account ac = new account();
         Statement stmt = null;
         String query = "", lname = "", email = "";
         int active = 0, merge = 0;
 
-        if(all)
+        if(val == 1)
             query = "select * from users where ulevel = 0";
-        else
+        else if(val == 2)
             query = "select * from users where uname = '" + user + "' and ulevel = 0";
+        else if(val == 3)
+            query = "select * from users where merge <> 0";
+
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
@@ -299,6 +376,24 @@ class sql {
             query = "update users set active = " + val + " where uname = '" + user + "'";
         else
             query = "update users set active = " + val + " where uname = '" + user + "' and active = 0";
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            if(!rs.isBeforeFirst()) {
+                System.out.println("Account not found");
+            }
+        } catch (SQLException e ) {
+            logger.error(e.getMessage());
+        } finally {
+            if (stmt != null) { stmt.close(); }
+        }
+    }
+
+    static void setAccountNum(String userTwo, int accOne) throws SQLException {
+        Statement stmt = null;
+        String query = "";
+
+        query = "update users set accnum = " + accOne + " where uname = '" + userTwo + "'";
         try {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);

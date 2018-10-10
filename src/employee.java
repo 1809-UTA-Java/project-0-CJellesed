@@ -11,13 +11,13 @@ class employee {
         System.out.println("\nEnter username to look up or press enter to search all.");
         choice = account.getString();
         if(choice.isEmpty()) {
-            try { sql.showUsers("", true); }
+            try { sql.showUsers("", 1); }
             catch(SQLException e) {
                 e.printStackTrace();
             }
         }
         else {
-            try { sql.showUsers(choice, false); }
+            try { sql.showUsers(choice, 2); }
             catch(SQLException e) {
                 e.printStackTrace();
             }
@@ -51,7 +51,7 @@ class employee {
 
                 set = true;
                 approve = 1;
-                try { sql.createMoneyAccount(user); }
+                try { sql.createMoneyAccount(user, 0.0); }
                 catch(SQLException e) {
                     e.printStackTrace();
                 }
@@ -65,5 +65,37 @@ class employee {
         catch(SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    static void approveMerge() {
+        String userOne = "", userTwo = "";
+        Integer UOneAccount = 0, UTwoAccount = 0;
+        System.out.println("Enter First Username");
+        userOne = account.getString();
+        System.out.println("Enter First Account Number");
+        UOneAccount = account.getNum();
+        System.out.println("Enter Second Username");
+        userTwo = account.getString();
+        System.out.println("Enter Second Account NUmber");
+        UTwoAccount = account.getNum();
+        String ammount = "";
+        try {  ammount = sql.getFunds(userTwo, "", 1); }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(ammount);
+        try { sql.withdraw(ammount, UTwoAccount); }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+        try { sql.deposit(ammount, UOneAccount); }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+        try {  sql.setAccountNum(userTwo, UOneAccount); }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Merge Done");
     }
 }
