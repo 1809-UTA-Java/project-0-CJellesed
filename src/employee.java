@@ -72,6 +72,16 @@ class employee {
             e.printStackTrace();
         }
     }
+
+    /**
+     * returns all users who requested an account merge.
+     */
+    static void showMergers() {
+        try { sql.showUsers("", 3); }
+        catch(SQLException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * currently asks for two users and their account numbers. the funds of each account are merged into the first and both
      * now share account 1.
